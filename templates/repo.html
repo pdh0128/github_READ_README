@@ -33,7 +33,7 @@
             font-size: 14px;
         }
 
-        #submmit {
+        #submit {
             display: none;
         }
 
@@ -58,17 +58,25 @@
             font-size: 14px;
             color: #888;
         }
+        body {
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <form>
-            <input type="text" placeholder="github 아이디, ex) pdh0128">
-        <button type="submit" id = "submmit">검색</button>
+        <input type="text" placeholder="github 아이디, ex) pdh0128">
+        <button type="submit" id = "submit">검색</button>
     </form>
-    <button onclick = "location.href= '/repo'">레포지토리 리드하기</button>
+    <button onclick = "location.href= '/'">개발자 정보 리드하기</button>
     <div id="loading">데이터를 가져오는 중입니다. 잠시만 기다려주세요...</div>
     <ul></ul>
+
 </div>
 <script>
     document.querySelector("form").addEventListener("submit", async e => {
@@ -78,28 +86,34 @@
         const loading = document.querySelector("#loading");
         loading.style.display = "block";
 
-        try {
-            const res = await fetch(`/api/read_developer?github_id=${github_id}`);
+            const res = await fetch(`/api/read_repo?github_id=${github_id}`);
             const data = await res.json();
+            console.log(data);
 
             loading.style.display = "none";
 
-            const li = document.createElement("li");
-            const ul = document.querySelector("ul");
-            const summary = data['information']['summary'];
-            const engine = data['information']['engine'];
-            if (engine !== "None") {
-                li.innerText = `정보: ${summary}\n기술스택: ${engine}`;
-                ul.appendChild(li);
-            } else {
+            if (!data['information'].length) {
                 alert("잘못된 정보입니다!");
-                console.log(data);
             }
-        } catch (error) {
-            loading.style.display = "none";
-            alert("데이터를 가져오는데 실패했습니다.");
-            console.error(error);
-        }
+            else {
+                const ul = document.querySelector("ul");
+
+                const li = document.createElement("li");
+                 li.innerHTML = `<h1>${github_id}</h1>`;
+                 li.style.backgroundColor = "gray";
+                 ul.appendChild(li);
+
+                data['information'].forEach((repo) => {
+                    const [repoName, summary] = Object.entries(repo)[0];
+                    const li = document.createElement("li");
+                    li.innerHTML = `<h3>${repoName}</h3>\n<p>${summary['summary']}</p>`;
+                    ul.appendChild(li);
+                    console.log(repoName)
+                    console.log(summary['summary'])
+                })
+
+            }
+
     });
 </script>
 </body>
