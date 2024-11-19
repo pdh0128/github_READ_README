@@ -1,12 +1,12 @@
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
-from tools.search import get_readme_url
+from tools.search import get_readme_info
 from output_parser import summary_parser, Summary
 load_dotenv()
-def read(url):
+def read(name):
     prompt = """
-    어떤 사람의 깃허브 리드미 코드를 줄게 {readme}, 그에 대한 설명을 해줘.
+    어떤 사람의 깃허브 리드미 코드를 줄게 {readme}, 그에 대한 설명을 해줘, 404오류가 뜨면 None을 반환해줘.
     1. 짧은 요약
     2. 기술스택
     {output_format}
@@ -16,7 +16,10 @@ def read(url):
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
     chain = summary | llm | summary_parser
-    code = get_readme_url(url)
+    code = get_readme_info(name)
     res = chain.invoke(input={"readme" :code})
     print(res)
     return res
+
+if __name__ == '__main__':
+    read('pdh0128')

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리드리드미</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background: #ffffff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        button {
+            display: none;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        li {
+            background: #f1f3f5;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            text-align: left;
+            white-space: pre-line;
+        }
+
+        #loading {
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form>
+        <input type="text" placeholder="github 아이디, ex) pdh0128">
+        <button type="submit">검색</button>
+    </form>
+    <div id="loading">데이터를 가져오는 중입니다. 잠시만 기다려주세요...</div>
+    <ul></ul>
+</div>
+<script>
+    document.querySelector("form").addEventListener("submit", async e => {
+        e.preventDefault();
+        const github_id = document.querySelector("input").value;
+
+        const loading = document.querySelector("#loading");
+        loading.style.display = "block";
+
+        try {
+            const res = await fetch(`/api/read?github_id=${github_id}`);
+            const data = await res.json();
+
+            loading.style.display = "none";
+
+            const li = document.createElement("li");
+            const ul = document.querySelector("ul");
+            const summary = data['information']['summary'];
+            const engine = data['information']['engine'];
+            if (engine !== "None") {
+                li.innerText = `정보: ${summary}\n기술스택: ${engine}`;
+                ul.appendChild(li);
+            } else {
+                alert("잘못된 정보입니다!");
+                console.log(data);
+            }
+        } catch (error) {
+            loading.style.display = "none";
+            alert("데이터를 가져오는데 실패했습니다.");
+            console.error(error);
+        }
+    });
+</script>
+</body>
+</html>
