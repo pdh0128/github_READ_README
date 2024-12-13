@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from tools.search import get_readme_info, get_repo_content, get_reponame
 from output_parser import summary_parser, Summary, read_summary_parser
 load_dotenv()
+
+
 def read_home(name):
     prompt = """
     어떤 사람의 깃허브 리드미 코드를 줄게 {readme}, 그에 대한 설명을 해줘, 404오류가 뜨면 None을 반환해줘.
@@ -30,6 +32,7 @@ def read(name):
 
     summary = PromptTemplate(input_variables=["readme"], template=prompt,
                              partial_variables={"output_format": read_summary_parser.get_format_instructions()})
+
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     contents = []
     chain = summary | llm | read_summary_parser
@@ -47,4 +50,4 @@ def read(name):
 
 
 if __name__ == '__main__':
-    read('bitbyte08')
+    read('whgkals')

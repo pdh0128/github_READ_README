@@ -81,7 +81,7 @@
         try {
             const res = await fetch(`/api/read_developer?github_id=${github_id}`);
             const data = await res.json();
-
+            console.log(data);
             loading.style.display = "none";
 
             const li = document.createElement("li");
