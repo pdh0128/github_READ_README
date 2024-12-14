@@ -5,8 +5,7 @@ from tools.search import get_readme_info, get_repo_content, get_reponame
 from output_parser import summary_parser, Summary, read_summary_parser
 load_dotenv()
 
-
-def read_home(name):
+async def read_home(name):
     prompt = """
     어떤 사람의 깃허브 리드미 코드를 줄게 {readme}, 그에 대한 설명을 해줘, 404오류가 뜨면 None을 반환해줘.
     1. 짧은 요약
@@ -23,7 +22,7 @@ def read_home(name):
     print(res)
     return res
 
-def read(name):
+async def read(name):
     prompt = """
         어떤 사람의 깃허브 리드미 코드를 줄게 {readme}, 그에 대한 설명을 해줘, 404오류가 뜨면 None을 반환해줘.
         1. 짧은 요약

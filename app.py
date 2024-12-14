@@ -1,36 +1,33 @@
-from flask import Flask, render_template, request, jsonify
 from Read import read_home, read
-app = Flask(__name__)
+from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
-@app.route('/')
-def main():
-    return render_template("index.html")
+app = FastAPI()
 
-@app.route("/repo")
-def submain():
-    return render_template("repo.html")
+templates = Jinja2Templates(directory="templates")
+@app.get('/')
+def main(request: Request):
+    return templates.TemplateResponse('index.html', {'request': request})
+@app.get('/repo')
+def repo(request: Request):
+    return templates.TemplateResponse('repo.html', {'request': request})
 
-@app.route("/api/read_developer", methods=["GET"])
-def reading():
-    name = request.args.get('github_id')
-
+@app.get("/api/read_developer")
+async def read_developer(github_id : str = None):
+    name = github_id
     if not name:
-        return jsonify({"error": "Missing 'name' parameter"}), 400
+        return JSONResponse({"error": "Missing 'name' parameter"}, status_code=400)
+    res = await read_home(name)
+    return JSONResponse({"information" : res.to_dict()}, status_code=200)
 
-    res = read_home(name)
-    return jsonify({"information" : res.to_dict()}), 200
-
-@app.route("/api/read_repo", methods=["GET"])
-def read_repo():
-    name = request.args.get('github_id')
+@app.get("/api/read_repo")
+async def read_repo(github_id : str = None):
+    name = github_id
     if not name:
-        return jsonify({"error": "Missing 'name' parameter"}), 400
-
-    res = read(name)
+        return JSONResponse({"error": "Missing 'name' parameter"}, status_code=400)
+    res = await read(name)
     data = []
     for item in res:
         data.append({key: value.to_dict() if hasattr(value, 'to_dict') else value for key, value in item.items()})
-    return jsonify({"information" : data}), 200
-
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=1000 , debug=True)
+    return JSONResponse({"information" : data}, status_code=200)
