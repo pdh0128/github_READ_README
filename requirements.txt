@@ -1,7 +1,10 @@
-Flask
+FastAPI
 requests
 beautifulsoup4
 langchain
-dotenv
+python-dotenv
 typing
 pydantic
+uvicorn
+langchain-openai
+jinja2

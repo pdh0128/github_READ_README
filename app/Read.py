@@ -2,7 +2,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 from tools.search import get_readme_info, get_repo_content, get_reponame
-from output_parser import summary_parser, Summary, read_summary_parser
+from app.output_parser import summary_parser, Summary, read_summary_parser
 load_dotenv()
 
 async def read_home(name):
