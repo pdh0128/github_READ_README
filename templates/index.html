@@ -5,69 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>리드리드미</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e8f4fd; /* 연한 블루 배경 */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            padding: 20px;
         }
 
         .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
             text-align: center;
-            background: #ffffff;
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #3498db; /* 메인 블루 */
+            margin-bottom: 20px;
         }
 
         input {
-            width: 200px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            font-size: 14px;
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #3498db; /* 블루 테두리 */
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            background-color: #f2faff; /* 밝은 블루 배경 */
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #2980b9; /* 입력창 포커스 시 더 짙은 블루 */
+            background-color: #ffffff;
+            outline: none;
+        }
+
+        button {
+            padding: 14px 25px;
+            background-color: #3498db; /* 블루 배경 */
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9; /* 버튼 호버 시 짙은 블루 */
         }
 
         #submmit {
             display: none;
         }
 
+        #loading {
+            display: none;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #2980b9; /* 짙은 블루로 강조 */
+            font-style: italic;
+        }
+
         ul {
             list-style: none;
             padding: 0;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         li {
             background: #f1f3f5;
-            padding: 10px;
+            padding: 12px;
             margin-top: 10px;
-            border-radius: 5px;
+            border-radius: 8px;
             text-align: left;
-            white-space: pre-line;
-        }
-
-        #loading {
-            display: none;
-            margin-top: 10px;
             font-size: 14px;
-            color: #888;
+            color: #3498db; /* 블루 색상 텍스트 */
+            white-space: pre-line;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div style="font-size: 30px;">Enter로 입력해주세요!</div>
+    <h1>GitHub 개발자 정보 검색🐳</h1>
     <form>
-            <input type="text" placeholder="github 아이디, ex) pdh0128">
-        <button type="submit" id = "submmit">검색</button>
+            <input type="text" placeholder="GitHub 아이디를 입력하세요, 예: pdh0128">
+        <button type="submit" id="submmit">검색</button>
     </form>
-    <button onclick = "location.href= '/repo'">레포지토리 리드하러가기</button>
+    <button onclick="location.href='/repo'">레포지토리 리드하러가기</button>
     <div id="loading">데이터를 가져오는 중입니다. 잠시만 기다려주세요...</div>
     <ul></ul>
 </div>
